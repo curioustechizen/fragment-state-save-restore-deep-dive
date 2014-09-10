@@ -1,0 +1,1 @@
+This repo hosts the code for the blog series about saving and restoring fragment state in Android. The posts are WIP and will be published at [my blog](http://curioustechizen.blogspot.com/).
