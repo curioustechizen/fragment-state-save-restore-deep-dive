@@ -63,7 +63,9 @@ public class FirstFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(KEY_ADAPTER_STATE, mAdapter.onSaveInstanceState());
+        if(mAdapter != null){
+            outState.putParcelableArrayList(KEY_ADAPTER_STATE, mAdapter.onSaveInstanceState());
+        }
     }
 
     private void populateList(FlagshipDevice ... items) {
