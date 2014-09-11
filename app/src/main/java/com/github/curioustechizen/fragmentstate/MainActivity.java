@@ -19,7 +19,15 @@ public class MainActivity extends Activity {
         }
     }
 
-    public void onBtnClick(View v){
+    public void onNextBtnClick(View v){
+        //This method is called when "Next" button in FirstFragment is clicked
+        //In production code, you would handle this click in the FirstFragment itself and use Callback Interfaces
+        // to ask the host Activity to take appropriate action
+
+        showSecondFragment();
+    }
+
+    private void showSecondFragment() {
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, SecondFragment.newInstance())

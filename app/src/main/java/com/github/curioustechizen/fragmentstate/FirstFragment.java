@@ -34,6 +34,9 @@ public class FirstFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_first, container, false);
         ListView lv = (ListView) rootView.findViewById(android.R.id.list);
+
+        //When we go to next fragment and return back here, the adapter is already present and populated.
+        //Don't create it again in such cases. Hence the null check.
         if(mAdapter == null){
             mAdapter = new FlagshipDeviceAdapter(getActivity());
         }

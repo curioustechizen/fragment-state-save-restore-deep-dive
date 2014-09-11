@@ -5,6 +5,12 @@
     android:orientation="vertical"
     >
 
+    <!--
+        NOTE: In a production app, never set layout_height to "wrap_content"
+        Instead, set it to match_parent and add additional buttons such as the ones below as
+        Footer Views. See ListView#addFooterView method for additional details
+    -->
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,7 +31,7 @@
         android:layout_height="wrap_content"
         android:text="Next"
         android:id="@+id/btn_next"
-        android:onClick="onBtnClick"
+        android:onClick="onNextBtnClick"
         android:layout_marginTop="@dimen/margin_vertical"
         android:layout_gravity="center_horizontal"/>
 </LinearLayout>
