@@ -16,6 +16,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import hugo.weaving.DebugLog;
+
 public class FirstFragment extends Fragment {
 
     private static final FlagshipDevice [] ITEMS = {
@@ -36,6 +38,7 @@ public class FirstFragment extends Fragment {
         return new FirstFragment();
     }
 
+    @DebugLog
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +49,7 @@ public class FirstFragment extends Fragment {
         }
     }
 
+    @DebugLog
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_first, container, false);
@@ -74,6 +78,7 @@ public class FirstFragment extends Fragment {
         return rootView;
     }
 
+    @DebugLog
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -92,6 +97,18 @@ public class FirstFragment extends Fragment {
     private void populateList(FlagshipDevice ... items) {
         mAdapter.clear();
         mAdapter.addAll(items);
+    }
+
+    @DebugLog
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    @DebugLog
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
 

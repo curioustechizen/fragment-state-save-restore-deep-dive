@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
+import hugo.weaving.DebugLog;
+
 
 public class MainActivity extends Activity {
 
+    @DebugLog
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,5 +36,17 @@ public class MainActivity extends Activity {
                 .replace(R.id.container, SecondFragment.newInstance())
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @DebugLog
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @DebugLog
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
