@@ -3,6 +3,8 @@ package com.github.curioustechizen.fragmentstate;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class FirstFragment extends Fragment {
@@ -22,7 +25,10 @@ public class FirstFragment extends Fragment {
             new FlagshipDevice("Nexus 5", "Phone"),
             new FlagshipDevice("Nexus 7 2013", "Tablet")
     };
+    private static final String KEY_ADAPTER_STATE = "com.github.curioustechizen.fragmentstate.KEY_ADAPTER_STATE";
+
     private FlagshipDeviceAdapter mAdapter;
+
 
     public FirstFragment(){}
 
@@ -40,6 +46,10 @@ public class FirstFragment extends Fragment {
         if(mAdapter == null){
             mAdapter = new FlagshipDeviceAdapter(getActivity());
         }
+        if(savedInstanceState != null && savedInstanceState.containsKey(KEY_ADAPTER_STATE)){
+            ArrayList<FlagshipDevice> savedAdapterState = savedInstanceState.getParcelableArrayList(KEY_ADAPTER_STATE);
+            mAdapter.onRestoreInstanceState(savedAdapterState);
+        }
         lv.setAdapter(mAdapter);
         ((Button)rootView.findViewById(R.id.btn_populate)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +58,12 @@ public class FirstFragment extends Fragment {
             }
         });
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(KEY_ADAPTER_STATE, mAdapter.onSaveInstanceState());
     }
 
     private void populateList(FlagshipDevice ... items) {
@@ -70,9 +86,23 @@ public class FirstFragment extends Fragment {
             return v;
         }
 
+        ArrayList<FlagshipDevice> onSaveInstanceState(){
+            int size = getCount();
+            ArrayList<FlagshipDevice> items = new ArrayList<FlagshipDevice>(size);
+            for(int i=0;i<size;i++){
+                items.add(getItem(i));
+            }
+            return items;
+        }
+
+        void onRestoreInstanceState(ArrayList<FlagshipDevice> items){
+            clear();
+            addAll(items);
+        }
+
     }
 
-    static class FlagshipDevice {
+    static class FlagshipDevice implements Parcelable {
         String name;
         String formFactor;
 
@@ -80,5 +110,34 @@ public class FirstFragment extends Fragment {
             this.name = name;
             this.formFactor = formFactor;
         }
+
+        protected FlagshipDevice(Parcel in) {
+            name = in.readString();
+            formFactor = in.readString();
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(name);
+            dest.writeString(formFactor);
+        }
+
+        @SuppressWarnings("unused")
+        public static final Parcelable.Creator<FlagshipDevice> CREATOR = new Parcelable.Creator<FlagshipDevice>() {
+            @Override
+            public FlagshipDevice createFromParcel(Parcel in) {
+                return new FlagshipDevice(in);
+            }
+
+            @Override
+            public FlagshipDevice[] newArray(int size) {
+                return new FlagshipDevice[size];
+            }
+        };
     }
 }
