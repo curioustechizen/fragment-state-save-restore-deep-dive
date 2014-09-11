@@ -15,7 +15,6 @@ public class MainActivity extends Activity {
             getFragmentManager()
                     .beginTransaction()
                     .replace(R.id.container, FirstFragment.newInstance())
-                    .addToBackStack(null)
                     .commit();
         }
     }

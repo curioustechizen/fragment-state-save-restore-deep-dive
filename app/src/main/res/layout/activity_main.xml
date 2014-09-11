@@ -2,6 +2,10 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/container">
+    android:id="@+id/container"
+    android:layout_marginTop="@dimen/margin_vertical"
+    android:layout_marginBottom="@dimen/margin_vertical"
+    android:layout_marginLeft="@dimen/margin_horizontal"
+    android:layout_marginRight="@dimen/margin_horizontal">
 
 </FrameLayout>
