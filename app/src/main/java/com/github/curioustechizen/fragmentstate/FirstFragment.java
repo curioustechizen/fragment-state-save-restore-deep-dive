@@ -28,12 +28,22 @@ public class FirstFragment extends Fragment {
     private static final String KEY_ADAPTER_STATE = "com.github.curioustechizen.fragmentstate.KEY_ADAPTER_STATE";
 
     private FlagshipDeviceAdapter mAdapter;
-
+    private ArrayList<FlagshipDevice> mAdapterSavedState;
 
     public FirstFragment(){}
 
     public static FirstFragment newInstance(){
         return new FirstFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //Retrieve saved state in onCreate. This method is called even when this fragment is on the back stack
+        if(savedInstanceState != null && savedInstanceState.containsKey(KEY_ADAPTER_STATE)){
+            mAdapterSavedState = savedInstanceState.getParcelableArrayList(KEY_ADAPTER_STATE);
+        }
     }
 
     @Override
@@ -46,9 +56,13 @@ public class FirstFragment extends Fragment {
         if(mAdapter == null){
             mAdapter = new FlagshipDeviceAdapter(getActivity());
         }
-        if(savedInstanceState != null && savedInstanceState.containsKey(KEY_ADAPTER_STATE)){
-            ArrayList<FlagshipDevice> savedAdapterState = savedInstanceState.getParcelableArrayList(KEY_ADAPTER_STATE);
-            mAdapter.onRestoreInstanceState(savedAdapterState);
+
+        //Use the state retrieved in onCreate and set it on your views etc in onCreateView
+        //This method is not called if the device is rotated when your fragment is on the back stack.
+        //That's OK since the next time the device is rotated, we save the state we had retrieved in onCreate
+        //instead of saving current state. See onSaveInstanceState for more details.
+        if(mAdapterSavedState != null){
+            mAdapter.onRestoreInstanceState(mAdapterSavedState);
         }
         lv.setAdapter(mAdapter);
         ((Button)rootView.findViewById(R.id.btn_populate)).setOnClickListener(new View.OnClickListener() {
@@ -63,9 +77,16 @@ public class FirstFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
         if(mAdapter != null){
-            outState.putParcelableArrayList(KEY_ADAPTER_STATE, mAdapter.onSaveInstanceState());
+            //This case is for when the fragment is at the top of the stack. onCreateView was called and hence there is state to save
+            mAdapterSavedState = mAdapter.onSaveInstanceState();
         }
+
+        //However, remember that this method is called when the device is rotated even if your fragment is on the back stack.
+        //In such cases, the onCreateView was not called, hence there is nothing to save.
+        //Hence, we just re-save the state that we had retrieved in onCreate. We sort of relay the state from onCreate to onSaveInstanceState.
+        outState.putParcelableArrayList(KEY_ADAPTER_STATE, mAdapterSavedState);
     }
 
     private void populateList(FlagshipDevice ... items) {
