@@ -1,5 +1,13 @@
-This repo hosts the code for the blog series about saving and restoring fragment state in Android. The posts are WIP and will be published at [my blog](http://curioustechizen.blogspot.com/).
+This repo was originally meant to act as a companion for a blog series, but I now feel the repo is comprehensive and blog posts are not needed.
 
+We take a deep dive into how `Fragment`s in Android save/restore their state during configuration changes. This may seem trivial at first. The first solution that comes to mind is:
+
+  1. Save state in `onSaveInstanceState`.
+  2. In `onCreateView`, inflate your view hierarchy and get a handle to your views (using `findViewById`, Butterknife, data-binding, whatever)
+  3. Also in `onCreateView`, retrieve previously saved state from the `Bundle` parameter passed in to this method.
+  4. Apply the state from step 3 into views from step 2.
+
+However, there are few subtleties to be aware of, especially when a `Fragment` is placed on the backstack. We will use a sample app to explore the issues that can crop up, and see how to fix them.
 
 TL;DR
 ----
